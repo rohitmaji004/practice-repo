@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard — Insurance</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    .kpi-card {
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: none;
+      background: #ffffff;
+      position: relative;
+    }
+
+    /* Accent bar on top of each card */
+    .kpi-card::before {
+      content: "";
+      display: block;
+      height: 6px;
+      width: 100%;
+      background: linear-gradient(90deg, #0d6efd, #66b2ff);
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Slight tint on hover */
+    .kpi-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 18px rgba(13, 110, 253, 0.2);
+      background: linear-gradient(135deg, #f8faff, #ffffff);
+    }
+
+    .kpi-icon {
+      font-size: 2.5rem;
+      color: #6c757d;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .kpi-card:hover .kpi-icon {
+      transform: scale(1.15);
+      color: #0d6efd;
+    }
+
+    h6.text-muted {
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      color: #5a5a5a;
+    }
+
+    h2 {
+      font-weight: 700;
+      margin-top: 0.3rem;
+      color: #212529;
+    }
+  </style>
+
+</head>
+<body class="bg-light">
+
+  <!-- Navbar (unchanged) -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#"><i class="bi bi-shield-check me-2"></i>InsurePro</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link active" th:href="@{/catalogue/view/list}">Catalogue</a></li>
+		  <li class="nav-item"><a class="nav-link active" th:href="@{/catalogue/view/filter}">Policy Filters</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Vehicles</a></li>
+        </ul>
+        <div class="dropdown">
+          <button class="btn btn-light rounded-pill dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle me-1"></i> Admin
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- KPIs (unchanged for now, you can add Thymeleaf later) -->
+  <section class="container my-4">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card kpi-card">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted">Current Customers</h6>
+              <h2 th:text="${customerCount}">0</h2>
+            </div>
+            <i class="bi bi-people kpi-icon text-primary"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card kpi-card">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted">Total Policies</h6>
+              <h2 th:text="${policyCount}">0</h2>
+            </div>
+            <i class="bi bi-file-earmark-text kpi-icon text-success"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card kpi-card">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="text-muted">Revenue</h6>
+              <h2 th:text="'₹' + ${revenue}">₹0</h2>
+            </div>
+            <i class="bi bi-currency-rupee kpi-icon text-warning"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters + Table -->
+  <section class="container my-4">
+    <div class="card shadow-sm">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+        <h5 class="mb-0">Policies</h5>
+        <a th:href="@{/catalogue/view/add}" class="btn btn-sm btn-success">
+          <i class="bi bi-plus-circle"></i> Add Policy
+        </a>
+
+        <!-- Filters form (unchanged for now) 
+        <form th:action="@{/catalogue/view/filter}" method="get" id="filterForm" class="d-flex flex-wrap gap-2 align-items-end">
+          <div>
+            <label for="typeFilter" class="form-label small mb-1">Type</label>
+            <select id="typeFilter" name="policyType" class="form-select form-select-sm">
+              <option value="">All Types</option>
+              <option value="Comprehensive" th:selected="${selectedType=='Comprehensive'}">Comprehensive</option>
+              <option value="Third-Party" th:selected="${selectedType=='Third-Party'}">Third-Party</option>
+              <option value="Own Damage" th:selected="${selectedType=='Own Damage'}">Own Damage</option>
+            </select>
+          </div>
+          <div>
+            <label for="minCoverage" class="form-label small mb-1">Min Coverage</label>
+            <input type="number" name="minCoverage" id="minCoverage" class="form-control form-control-sm" th:value="${minCoverage}">
+          </div>
+          <div>
+            <label for="maxCoverage" class="form-label small mb-1">Max Coverage</label>
+            <input type="number" name="maxCoverage" id="maxCoverage" class="form-control form-control-sm" th:value="${maxCoverage}">
+          </div>
+          <div class="d-flex gap-1">
+            <button type="submit" class="btn btn-sm btn-primary">
+              <i class="bi bi-funnel"></i> Apply
+            </button>
+            <a th:href="@{/catalogue/list}" class="btn btn-sm btn-outline-secondary">Reset</a>
+          </div>
+        </form> -->
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="policiesTable">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Description</th>
+              <th>Coverage (₹)</th>
+              <th>Type</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Thymeleaf loop for all policies -->
+            <tr th:each="policy : ${policies}">
+              <td th:text="${policy.id}">1</td>
+              <td th:text="${policy.policyName}">Policy Name</td>
+              <td th:text="${policy.coverageAmount}">100000</td>
+              <td th:text="${policy.policyType}">Type</td>
+              <td class="text-center">
+                <a th:href="@{'/catalogue/view/fetch/' + ${policy.id}}" class="btn btn-sm btn-info">View</a>
+                <a th:href="@{'/catalogue/view/edit/' + ${policy.id}}" class="btn btn-sm btn-warning">Edit</a>
+                <a th:href="@{'/catalogue/view/remove/' + ${policy.id}}" 
+				class="btn btn-sm btn-danger" 
+				onclick="return confirm('Are you sure you want to delete this policy?');">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

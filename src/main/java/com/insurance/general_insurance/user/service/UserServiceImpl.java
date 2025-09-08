@@ -135,6 +135,9 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(userId);
     }
+    public Long getCustomerCount() {
+    	return userRepository.customerCount();
+    }
 
     @Override
     public List<User> getAllUsers(){
