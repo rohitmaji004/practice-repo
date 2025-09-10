@@ -22,13 +22,11 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -108,7 +106,5 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
 }
