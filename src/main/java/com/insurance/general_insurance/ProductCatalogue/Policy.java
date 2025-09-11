@@ -2,7 +2,7 @@ package com.insurance.general_insurance.ProductCatalogue;
 import jakarta.persistence.*;
 import java.time.*;
 import com.insurance.general_insurance.user.entity.User;
-
+import com.insurance.general_insurance.vehicle.entity.Vehicle;
 
 @Entity
 public class Policy {

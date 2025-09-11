@@ -1,13 +1,10 @@
 package com.insurance.general_insurance.ProductCatalogue;
-import com.insurance.general_insurance.user.*;
 import com.insurance.general_insurance.user.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 

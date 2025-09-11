@@ -3,3 +3,6 @@
 /target/
 .mvn/
 *.log
+.settings
+.classpath
+.project

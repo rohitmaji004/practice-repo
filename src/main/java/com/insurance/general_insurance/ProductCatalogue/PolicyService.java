@@ -1,6 +1,4 @@
 package com.insurance.general_insurance.ProductCatalogue;
-import com.insurance.general_insurance.user.*;
-import com.insurance.general_insurance.user.entity.User;
 import com.insurance.general_insurance.user.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
