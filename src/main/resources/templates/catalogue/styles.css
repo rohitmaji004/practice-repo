@@ -1,0 +1,27 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fc;
+}
+
+.navbar-brand i {
+  font-size: 1.3rem;
+}
+
+.kpi-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.kpi-card h2 {
+  font-weight: bold;
+}
+
+.kpi-icon {
+  font-size: 2rem;
+}
+
+.table thead th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

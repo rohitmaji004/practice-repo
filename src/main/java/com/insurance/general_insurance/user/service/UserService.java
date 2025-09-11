@@ -22,4 +22,5 @@ public interface UserService {
     void deleteUser(Long userId) throws Exception;
 
     List<User> getAllUsers();
+    public Long getCustomerCount();
 }

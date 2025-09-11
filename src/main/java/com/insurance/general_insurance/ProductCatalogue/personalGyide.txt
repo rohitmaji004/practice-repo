@@ -1,0 +1,23 @@
+1. So like the dto class is the class of object being sent over the to update or modify??
+Answer: It is the object that is used for data transfer from one layer to another
+Some fields are not given by user in the DTO say while updation so then what happens.
+If I dont use DTO , I directly work on the entity class during API calls. 
+
+2. The most ideal order to create the files???
+First start with the entity classes, they are the basics: these define the schema of the database in your application
+Then make the repository interface: They extend the JpaRepository(ORM) that enable communication between the database and the application. 
+Then the service classes: They have the business logic of the application, these basically give the orders of what action is required and it is executed by the help of the repository.
+Then the controllers:These are the ones that the people interact with, when they do an action and particular end-point is hit and calls about the execution of the business logic.
+
+3. what is catalogue management really???
+It is about how to manage the product is stock. It has two parts. One is policy perspective and one is catalogue perspective. Also this whole thing has two side: Admin and user
+For the policy perspective: related to the policy, accessing a particular policy by id or the policies by a particular user.
+For the Catalogue perspective: adding stuff to the catalogue, filter the policy by some criteria.
+
+4. Do I really need a Catalogue repository??
+All the catalogue functions are done on the policies itself. And there is a repository for policy.
+
+5. How to NOT write the getter Setter function manually???-> apparently @Grtter @Setter is not enoghu.
+
+6. Catlaogue-> add ing new, removing old, modification of exsiting policies
+policy mnah=gement -? management in relation to the humans.- customer details, veicles ,  preieum insured amu=ount.(Legal )
