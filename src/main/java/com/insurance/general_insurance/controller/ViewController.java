@@ -1,8 +1,7 @@
 package com.insurance.general_insurance.controller;
 
-import com.insurance.general_insurance.user.dto.UserProfileDTO;
-import com.insurance.general_insurance.user.dto.UserRegistrationRequest;
-import com.insurance.general_insurance.user.service.UserService;
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +9,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
+import com.insurance.general_insurance.user.dto.UserProfileDTO;
+import com.insurance.general_insurance.user.dto.UserRegistrationRequest;
+import com.insurance.general_insurance.user.service.UserService;
 
 @Controller
 public class ViewController {
@@ -33,7 +34,8 @@ public class ViewController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") UserRegistrationRequest request, RedirectAttributes redirectAttributes) {
+    public String registerUser(@ModelAttribute("user") UserRegistrationRequest request,
+            RedirectAttributes redirectAttributes) {
 
         System.out.println("Received registration request for email: " + request.getEmail());
 
@@ -58,59 +60,14 @@ public class ViewController {
         }
     }
 
+    // New endpoint for the online policy purchase form
+    @GetMapping("/purchase-policy")
+    public String purchasePolicyForm() {
+        return "online_policy_purchase";
+    }
+
     @GetMapping("/")
     public String index() {
         return "redirect:/login";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//package com.insurance.general_insurance.controller;
-//
-//import com.insurance.general_insurance.user.dto.UserRegistrationRequest;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.GetMapping;
-//
-//@Controller
-//public class ViewController {
-//
-//    @GetMapping("/login")
-//    public String login() {
-//        return "login";
-//    }
-//
-//    @GetMapping("/register")
-//    public String showRegistrationForm(Model model) {
-//        model.addAttribute("user", new UserRegistrationRequest());
-//        return "register";
-//    }
-//
-//    // Redirect the root URL to the login page
-//    @GetMapping("/")
-//    public String index() {
-//        return "redirect:/login";
-//    }
-//}

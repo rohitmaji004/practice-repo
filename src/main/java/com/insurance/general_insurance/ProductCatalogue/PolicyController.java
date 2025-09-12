@@ -1,9 +1,18 @@
 package com.insurance.general_insurance.ProductCatalogue;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller for managing individual policies.
@@ -27,7 +36,8 @@ public class PolicyController {
         return new ResponseEntity<>(newPolicy, HttpStatus.CREATED);
     }
 
-    // Admin: Update an existing policy (Admin can change details like price, coverage)
+    // Admin: Update an existing policy (Admin can change details like price,
+    // coverage)
     @PutMapping("/update/{policyId}") // This is also working
     public ResponseEntity<Policy> updatePolicy(@PathVariable Long policyId, @RequestBody Policy updatedPolicy) {
         Policy policy = policyService.updatePolicy(policyId, updatedPolicy);
@@ -48,14 +58,6 @@ public class PolicyController {
         return new ResponseEntity<>(policy, HttpStatus.OK);
     }
 
-    // User: Purchase a policy (User can choose and buy a policy from the available options)
-    // check if mutple policies can be assigned to to a
-    @PostMapping("/purchase/{userId}/{policyId}") // This is being developed by Rohit Maji as part of policy purchase Module.
-//    public ResponseEntity<String> purchasePolicy(@PathVariable Long userId,@PathVariable Long policyId) {
-//        String confirmation = policyService.purchasePolicy(userId,policyId);
-//        return new ResponseEntity<>(confirmation, HttpStatus.OK);
-//    }
-
     // User: View all purchased policies (User can see the policies they’ve bought)
     @GetMapping("/user/{userId}") // This is working
     public ResponseEntity<List<Policy>> getUserPolicies(@PathVariable Long userId) {
@@ -63,12 +65,13 @@ public class PolicyController {
         return new ResponseEntity<>(userPolicies, HttpStatus.OK);
     }
 
-    // User: Update their personal information on a policy (For example, contact info)
-//    @PutMapping("/update/user/{policyId}")
-//    public ResponseEntity<Policy> updateUserPolicyInfo(
-//            @PathVariable Long policyId, 
-//            @RequestBody Policy updatedPolicy) {
-//        Policy policy = policyService.updateUserPolicyInfo(policyId, updatedPolicy);
-//        return new ResponseEntity<>(policy, HttpStatus.OK);
-//    }
+    // User: Update their personal information on a policy (For example, contact
+    // info)
+    // @PutMapping("/update/user/{policyId}")
+    // public ResponseEntity<Policy> updateUserPolicyInfo(
+    // @PathVariable Long policyId,
+    // @RequestBody Policy updatedPolicy) {
+    // Policy policy = policyService.updateUserPolicyInfo(policyId, updatedPolicy);
+    // return new ResponseEntity<>(policy, HttpStatus.OK);
+    // }
 }
