@@ -1,16 +1,26 @@
 package com.insurance.general_insurance.user.entity;
 
-import com.insurance.general_insurance.vehicle.entity.Vehicle;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import com.insurance.general_insurance.vehicle.entity.Vehicle;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
@@ -43,7 +53,6 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        // Our UserDetails will use email as the username
         return email;
     }
 
@@ -67,8 +76,3 @@ public class User implements UserDetails {
         return true;
     }
 }
-
-
-//passwor reset
-//forgot pass
-//password expired

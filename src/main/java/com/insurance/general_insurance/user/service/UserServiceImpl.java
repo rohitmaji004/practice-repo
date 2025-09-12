@@ -16,12 +16,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -29,9 +27,8 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
-    @Transactional(readOnly = true) // Important: Keeps the session open
+    @Transactional(readOnly = true)
     public UserProfileDTO getUserProfile(String userEmail) throws Exception {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new Exception("User not found"));
@@ -43,10 +40,8 @@ public class UserServiceImpl implements UserService {
         dto.setEmail(user.getEmail());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setAddress(user.getAddress());
-        dto.setRole(user.getRole().name());
+        dto.setRole(user.getRole().name().replace("ROLE_", "")); // Remove ROLE_ prefix for display
 
-        // This is where the magic happens. Because the method is transactional,
-        // we can access the lazy collection here.
         List<VehicleDTO> vehicleDTOs = user.getVehicles().stream().map(vehicle -> {
             VehicleDTO vDto = new VehicleDTO();
             vDto.setId(vehicle.getId());
@@ -63,84 +58,50 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(UserRegistrationRequest request) throws Exception {
-
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new Exception("User with email " + request.getEmail() + " already exists.");
         }
 
         User newUser = new User();
+        if (request.getUserId() != null) {
+            newUser.setId(request.getUserId());
+        }
         newUser.setFirstName(request.getFirstName());
         newUser.setLastName(request.getLastName());
         newUser.setEmail(request.getEmail());
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         newUser.setPassword(encodedPassword);
-
-
-        System.out.println("DEBUG (Register): Encoder instance ID: " + System.identityHashCode(passwordEncoder));
-
-
         newUser.setPhoneNumber(request.getPhoneNumber());
         newUser.setAddress(request.getAddress());
-
-        // Set the default role for a new user
-        newUser.setRole(Role.USER);
-
+        newUser.setRole(Role.ROLE_USER); // Use ROLE_USER
         return userRepository.save(newUser);
     }
 
     @Override
-    public User updateUser( String userEmail ,UserUpdateRequest request) throws Exception{
-        User existingUser = userRepository.findByEmail(userEmail)
-                .orElseThrow(()-> new Exception("user not found"));
-
-        if (request.getEmail() != null && !request.getEmail().equals(userEmail)) {
-            Optional<User> userWithNewEmail = userRepository.findByEmail(request.getEmail());
-            if (userWithNewEmail.isPresent()) {
-                throw new Exception("Email is already in use by another account.");
-            }
-            existingUser.setEmail(request.getEmail());
-        }
-
-        if (request.getPhoneNumber() != null) {
-            existingUser.setPhoneNumber(request.getPhoneNumber());
-        }
-        if (request.getAddress() != null) {
-            existingUser.setAddress(request.getAddress());
-        }
-
-        return userRepository.save(existingUser);
+    public User updateUser(String userEmail, UserUpdateRequest request) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public void changePassword(String userEmail, ChangePasswordRequest request) throws Exception{
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(()->new Exception("User not found"));
-
-        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-            throw new Exception("Incorrect old password.");
-        }
-
-        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
-            throw new Exception("New password cannot be the same as the old password.");
-        }
-
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
+    public void changePassword(String userEmail, ChangePasswordRequest request) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public void deleteUser(Long userId) throws Exception{
-        if (!userRepository.existsById(userId)) {
-            throw new Exception("User with ID " + userId + " not found.");
-        }
-        userRepository.deleteById(userId);
+    public void deleteUser(Long userId) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
     public Long getCustomerCount() {
     	return userRepository.customerCount();
     }
 
     @Override
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public List<User> getAllUsers() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public User adminUpdateUser(Long userId, UserUpdateRequest request) throws Exception {
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 }
