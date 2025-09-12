@@ -3,7 +3,6 @@ package com.insurance.general_insurance.controller;
 import com.insurance.general_insurance.user.dto.UserProfileDTO;
 import com.insurance.general_insurance.user.dto.UserRegistrationRequest;
 import com.insurance.general_insurance.user.service.UserService;
-import com.insurance.general_insurance.vehicle.service.VehicleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +16,9 @@ import java.security.Principal;
 public class ViewController {
 
     private final UserService userService;
-    private final VehicleService vehicleService;
 
-    public ViewController(UserService userService, VehicleService vehicleService) {
+    public ViewController(UserService userService) {
         this.userService = userService;
-        this.vehicleService = vehicleService;
     }
 
     @GetMapping("/login")
@@ -55,9 +52,6 @@ public class ViewController {
         try {
             UserProfileDTO userProfile = userService.getUserProfile(principal.getName());
             model.addAttribute("user", userProfile);
-            if (userProfile.getRole() != null && userProfile.getRole().equalsIgnoreCase("ADMIN")) {
-                model.addAttribute("allVehicles", vehicleService.getAllVehicles());
-            }
             return "dashboard";
         } catch (Exception e) {
             return "redirect:/login?error";

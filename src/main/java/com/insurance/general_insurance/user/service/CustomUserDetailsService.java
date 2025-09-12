@@ -1,15 +1,10 @@
 package com.insurance.general_insurance.user.service;
 
 import com.insurance.general_insurance.user.repository.UserRepository;
-import com.insurance.general_insurance.user.entity.Role;
-import com.insurance.general_insurance.user.entity.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
