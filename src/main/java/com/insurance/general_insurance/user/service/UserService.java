@@ -9,6 +9,7 @@ import com.insurance.general_insurance.user.dto.UserRegistrationRequest;
 
 import java.util.List;
 
+
 public interface UserService {
 
     UserProfileDTO getUserProfile(String userEmail) throws Exception;
@@ -23,4 +24,8 @@ public interface UserService {
 
     List<User> getAllUsers();
     public Long getCustomerCount();
+
+    // Admin: update any user by userId
+    User adminUpdateUser(Long userId, UserUpdateRequest request) throws Exception;
+
 }

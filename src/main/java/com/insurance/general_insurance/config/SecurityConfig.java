@@ -28,7 +28,6 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -47,24 +46,23 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-
     @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/api/**") // This config only applies to URLs starting with /api/
+                .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        .requestMatchers("/api/users/register", "/api/users/login", "/api/users/profile").permitAll()
+                        .requestMatchers("/api/vehicles/by-registration/update", "/api/vehicles/by-registration/delete").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Must be stateless
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider());
 
         return http.build();
     }
-
 
     @Bean
     @Order(2)
@@ -73,6 +71,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/register", "/js/**", "/css/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/vehicles/by-registration/update", "/vehicles/by-registration/delete").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -84,7 +83,6 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
-                // By not specifying sessionManagement, we use the default: STATEFUL sessions
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()))
                 .authenticationProvider(authenticationProvider());
@@ -92,7 +90,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
-
-
-

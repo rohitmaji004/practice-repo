@@ -8,9 +8,11 @@ import lombok.Setter;
  * This is the object that the API controller will receive from the client.
  */
 
+
 @Getter
 @Setter
 public class UserRegistrationRequest {
+    private Long userId; // Added userId field
     private String firstName;
     private String lastName;
     private String email;
