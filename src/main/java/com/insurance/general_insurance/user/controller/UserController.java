@@ -107,34 +107,4 @@ public class UserController {
         }
     }
 
-    // Admin: update any user by userId
-    @PutMapping("/admin/{userId}")
-    public ResponseEntity<?> adminUpdateUser(@AuthenticationPrincipal UserDetails userDetails,
-                                             @PathVariable Long userId,
-                                             @RequestBody UserUpdateRequest request) {
-        if (userDetails == null || userDetails.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ADMIN"))) {
-            return new ResponseEntity<>("Only admin can update user details", HttpStatus.FORBIDDEN);
-        }
-        try {
-            User updatedUser = userService.adminUpdateUser(userId, request);
-            return ResponseEntity.ok(updatedUser);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    // Admin: delete any user by userId
-    @DeleteMapping("/admin/{userId}")
-    public ResponseEntity<?> adminDeleteUser(@AuthenticationPrincipal UserDetails userDetails,
-                                             @PathVariable Long userId) {
-        if (userDetails == null || userDetails.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ADMIN"))) {
-            return new ResponseEntity<>("Only admin can delete users", HttpStatus.FORBIDDEN);
-        }
-        try {
-            userService.deleteUser(userId);
-            return ResponseEntity.ok("User deleted successfully");
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 }
