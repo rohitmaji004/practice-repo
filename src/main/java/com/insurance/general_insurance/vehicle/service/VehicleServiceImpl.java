@@ -28,7 +28,7 @@ public class VehicleServiceImpl implements VehicleService {
         Vehicle vehicle = new Vehicle();
         vehicle.setRegistrationNumber(request.getRegistrationNumber());
         vehicle.setVehicleType(request.getVehicleType());
-        vehicle.setOwnerName(request.getOwnerName());
+        vehicle.setVehicleName(request.getVehicleName());
         vehicle.setUser(user);
 
         return vehicleRepository.save(vehicle);
@@ -39,5 +39,13 @@ public class VehicleServiceImpl implements VehicleService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new Exception("User not found"));
         return vehicleRepository.findByUser_Id(user.getId());
+    }
+
+    @Override
+    public void deleteVehicle(Long vehicleId) throws Exception {
+        if (!vehicleRepository.existsById(vehicleId)) {
+            throw new Exception("Vehicle with ID " + vehicleId + " not found.");
+        }
+        vehicleRepository.deleteById(vehicleId);
     }
 }

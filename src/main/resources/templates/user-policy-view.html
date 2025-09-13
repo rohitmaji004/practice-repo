@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Policy Details — Insurance</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body class="bg-light">
@@ -43,7 +40,6 @@
 </nav>
 
 <div class="container my-5">
-    <!-- Card for Policy Details -->
     <div class="card shadow-lg border-0 rounded-4">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Policy Details</h4>
@@ -55,77 +51,35 @@
             <div class="row g-4">
                 <div class="col-md-6">
                     <h6 class="text-muted">Policy ID</h6>
-<!--                    <p class="fw-bold fs-5" th:text="${policy.id}">1</p>-->
-                        <p class="fw-bold fs-5">1</p>
+                    <p class="fw-bold fs-5" th:text="${policy.id}">1</p>
                 </div>
                 <div class="col-md-6">
                     <h6 class="text-muted">Policy Name</h6>
-<!--                    <p class="fw-bold fs-5" th:text="${policy.policyName}">Sample Policy</p>-->
-                    <p class="fw-bold fs-5" >Sample Policy</p>
+                    <p class="fw-bold fs-5" th:text="${policy.policyName}">Sample Policy</p>
                 </div>
                 <div class="col-md-6">
                     <h6 class="text-muted">Policy Type</h6>
-<!--                    <span class="badge bg-success fs-6 px-3 py-2" th:text="${policy.policyType}">Comprehensive</span>-->
-                    <span class="badge bg-success fs-6 px-3 py-2">Comprehensive</span>
-
+                    <span class="badge bg-success fs-6 px-3 py-2" th:text="${policy.policyType.name().replace('_', ' ')}">Comprehensive</span>
                 </div>
                 <div class="col-md-6">
-                    <h6 class="text-muted">Coverage Amount</h6>
-<!--                    <p class="fw-bold fs-5 text-primary">₹<span th:text="${policy.coverageAmount}">100000</span></p>-->
-                    <p class="fw-bold fs-5 text-primary">₹<span>100000</span></p>
-
+                    <h6 class="text-muted">Insured Declared Value (IDV)</h6>
+                    <p class="fw-bold fs-5 text-primary">₹<span th:text="${policy.insuredDeclaredValue}">100000</span></p>
                 </div>
                 <div class="col-md-6">
                     <h6 class="text-muted">Premium Amount</h6>
-<!--                    <p class="fw-bold fs-5 text-danger">₹<span th:text="${policy.premiumAmount}">5000</span></p>-->
-                    <p class="fw-bold fs-5 text-danger">₹<span>5000</span></p>
-
+                    <p class="fw-bold fs-5 text-danger">₹<span th:text="${policy.premiumAmount}">5000</span></p>
                 </div>
-
-                <!-- Tenure Selection -->
-                <!-- Tenure Selection -->
-                <div class="col-md-6">
-                    <h6 class="text-muted mb-2">Select Tenure</h6>
-                    <div class="d-flex gap-2">
-                        <input type="radio" class="btn-check" name="tenure" id="tenure1" value="1" checked>
-                        <label class="btn btn-outline-primary rounded-pill px-4" for="tenure1">1 Year</label>
-
-                        <input type="radio" class="btn-check" name="tenure" id="tenure2" value="2">
-                        <label class="btn btn-outline-primary rounded-pill px-4" for="tenure2">2 Years</label>
-
-                        <input type="radio" class="btn-check" name="tenure" id="tenure3" value="3">
-                        <label class="btn btn-outline-primary rounded-pill px-4" for="tenure3">3 Years</label>
-                    </div>
-                </div>
-
-                <style>
-                    /* Make the selected pill stand out */
-                    .btn-check:checked + .btn {
-                      background-color: #0d6efd;
-                      color: #fff;
-                      font-weight: 600;
-                      box-shadow: 0 3px 6px rgba(13,110,253,0.3);
-                    }
-                    .btn:hover {
-                      transform: translateY(-2px);
-                      transition: 0.2s;
-                    }
-                </style>
-
-
-
-                <!-- IDV Amount -->
-                <div class="col-md-6">
-                    <h6 class="text-muted">IDV Amount</h6>
-                    <p class="fw-bold fs-5 text-success">₹<span id="idvAmount">5000</span></p>
-                </div>
-
                 <div class="col-12">
                     <h6 class="text-muted">Description</h6>
-<!--                    th:text="${policy.description}"-->
-                    <p class="fw-normal fs-6">
+                    <p class="fw-normal fs-6" th:text="${policy.description}">
                         This policy provides comprehensive coverage against damages and third-party liability.
                     </p>
+                </div>
+                <div class="col-12" th:if="${!policy.addons.isEmpty()}">
+                    <h6 class="text-muted">Included Add-ons</h6>
+                    <ul class="list-group">
+                        <li class="list-group-item" th:each="addon : ${policy.addons}" th:text="${addon.name().replace('_', ' ')}"></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -136,19 +90,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Simple JS to update IDV amount based on tenure
-    const idvAmount = document.getElementById("idvAmount");
-    const baseAmount = 5000; // base premium (could be th:text from policy.premiumAmount)
-
-    document.querySelectorAll("input[name='tenure']").forEach(radio => {
-      radio.addEventListener("change", () => {
-        const years = parseInt(radio.value);
-        idvAmount.textContent = baseAmount * years;
-      });
-    });
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

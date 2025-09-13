@@ -21,8 +21,10 @@ public class Vehicle {
     private Long id;
 
     private String registrationNumber;
-    private String vehicleType;
-    private String ownerName;
+    private String vehicleName; // Renamed from ownerName
+
+    @Enumerated(EnumType.STRING) // To store the enum as a string
+    private VehicleType vehicleType;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

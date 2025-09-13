@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Admin Dashboard — Insurance</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th/href="@{/css/styles.css}">
     <style>
         .info-banner {
           background: linear-gradient(90deg, #0d6efd, #66b2ff);
@@ -34,7 +31,6 @@
 </head>
 <body class="bg-light">
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="#"><i class="bi bi-shield-check me-2"></i>InsurePro</a>
@@ -64,7 +60,6 @@
 </nav>
 
 
-<!-- Info banner (instead of KPIs) -->
 <section class="container">
     <div class="info-banner">
         <h4>Explore Our Insurance Catalogue</h4>
@@ -72,7 +67,6 @@
     </div>
 </section>
 
-<!-- Policies Table -->
 <section class="container my-4">
     <div class="card shadow-sm">
         <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
@@ -85,32 +79,20 @@
                 <tr>
                     <th>ID</th>
                     <th>Description</th>
-                    <th>Coverage (₹)</th>
+                    <th>IDV (₹)</th>
                     <th>Type</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Thymeleaf loop for all policies -->
                 <tr th:each="policy : ${policies}">
                     <td th:text="${policy.id}">1</td>
                     <td th:text="${policy.policyName}">Policy Name</td>
-                    <td th:text="${policy.coverageAmount}">100000</td>
-                    <td th:text="${policy.policyType}">Type</td>
+                    <td th:text="${policy.insuredDeclaredValue}">100000</td>
+                    <td th:text="${policy.policyType.name().replace('_', ' ')}">Type</td>
                     <td class="text-center">
-                        <a th:href="@{'/user/policyView'}" class="btn btn-sm btn-info">View</a>
-                        <button class="btn btn-sm btn-success">Purchase</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>1</td>
-                    <td>Policy Name</td>
-                    <td>100000</td>
-                    <td>Type</td>
-                    <td class="text-center">
-                        <a th:href="@{'/user/policyView'}" class="btn btn-sm btn-info">View</a>
-                        <button class="btn btn-sm btn-success">Purchase</button>
+                        <a th:href="@{/user/policyView/{policyId}(policyId=${policy.id})}" class="btn btn-sm btn-info">View</a>
+                        <a th:if="${vehicle != null}" th:href="@{/purchase-policy(policyId=${policy.id}, vehicleId=${vehicle.id})}" class="btn btn-sm btn-success">Purchase</a>
                     </td>
                 </tr>
                 </tbody>
@@ -120,5 +102,28 @@
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const vehicle = /*[[${vehicle}]]*/ null;
+    if (vehicle) {
+        console.log("Vehicle data:", vehicle);
+
+        const vehicleTypeMultipliers = {
+            'FOUR_WHEELER_SUV': 1.5,
+            'FOUR_WHEELER_NORMAL': 1.2,
+            'TWO_WHEELER': 0.8
+        };
+
+        const multiplier = vehicleTypeMultipliers[vehicle.vehicleType] || 1;
+
+        document.querySelectorAll("#policiesTable tbody tr").forEach(row => {
+            const idvCell = row.cells[2];
+            let idv = parseFloat(idvCell.textContent);
+            idv = idv * multiplier;
+            idvCell.textContent = idv.toFixed(2);
+        });
+    }
+    /*]]>*/
+</script>
 </body>
 </html>

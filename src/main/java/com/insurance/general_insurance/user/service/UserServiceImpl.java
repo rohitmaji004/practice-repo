@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             vDto.setId(vehicle.getId());
             vDto.setRegistrationNumber(vehicle.getRegistrationNumber());
             vDto.setVehicleType(vehicle.getVehicleType());
-            vDto.setOwnerName(vehicle.getOwnerName());
+            vDto.setVehicleName(vehicle.getVehicleName()); // Changed from setOwnerName
             return vDto;
         }).collect(Collectors.toList());
 
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
     }
     public Long getCustomerCount() {
-    	return userRepository.customerCount();
+        return userRepository.customerCount();
     }
 
     @Override

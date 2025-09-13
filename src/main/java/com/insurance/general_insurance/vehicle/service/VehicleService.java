@@ -8,4 +8,5 @@ import java.util.List;
 public interface VehicleService {
     Vehicle registerVehicle(String userEmail, VehicleRegistrationRequest request) throws Exception;
     List<Vehicle> getVehiclesForUser(String userEmail) throws Exception;
+    void deleteVehicle(Long vehicleId) throws Exception; // Add this line
 }

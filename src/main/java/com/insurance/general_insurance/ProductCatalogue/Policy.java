@@ -1,40 +1,51 @@
 package com.insurance.general_insurance.ProductCatalogue;
-import jakarta.persistence.*;
-import java.time.*;
+
 import com.insurance.general_insurance.user.entity.User;
 import com.insurance.general_insurance.vehicle.entity.Vehicle;
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 public class Policy {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
-    
-    private String policyName;
-    private String policyType;
-    private Double coverageAmount;
-    private Double premiumAmount;
-    private String description;
-    private LocalDate startDate;
-    private LocalDate endDate;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Eager load the user
-    @JoinColumn(name = "user_id")
-    private User user;  // Do I really need this?? I mean why does policy need to have a User Object
-    //It can be mapped to may users right???Or is it just for the mapping and connecting databases
-    
-    @ManyToOne(fetch = FetchType.EAGER) // Eager load the vehicle
-    @JoinColumn(name = "vehicle_id")
-    private Vehicle vehicle;
+	private String policyName;
 
-    public Long getId()
-    {
-    	return id;
-    }
-    public void setId(Long id)
-    {
-    	this.id=id;
-    }
+	@Enumerated(EnumType.STRING)
+	private PolicyType policyType;
+
+	private Double insuredDeclaredValue; // Renamed from coverageAmount
+	private Double premiumAmount;
+	private String description;
+	private LocalDate startDate;
+	private LocalDate endDate;
+
+	@ElementCollection(targetClass = Addon.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "policy_addons", joinColumns = @JoinColumn(name = "policy_id"))
+	@Enumerated(EnumType.STRING)
+	private Set<Addon> addons;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "vehicle_id")
+	private Vehicle vehicle;
+
+	// Getters and Setters
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getPolicyName() {
 		return policyName;
 	}
@@ -43,36 +54,20 @@ public class Policy {
 		this.policyName = policyName;
 	}
 
-	public LocalDate getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
-
-	public LocalDate getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getPolicyType() {
+	public PolicyType getPolicyType() {
 		return policyType;
 	}
 
-	public void setPolicyType(String policyType) {
+	public void setPolicyType(PolicyType policyType) {
 		this.policyType = policyType;
 	}
 
-	public Double getCoverageAmount() {
-		return coverageAmount;
+	public Double getInsuredDeclaredValue() {
+		return insuredDeclaredValue;
 	}
 
-	public void setCoverageAmount(Double coverageAmount) {
-		this.coverageAmount = coverageAmount;
+	public void setInsuredDeclaredValue(Double insuredDeclaredValue) {
+		this.insuredDeclaredValue = insuredDeclaredValue;
 	}
 
 	public Double getPremiumAmount() {
@@ -91,7 +86,43 @@ public class Policy {
 		this.description = description;
 	}
 
-	
+	public LocalDate getStartDate() {
+		return startDate;
+	}
 
-    // Getters and Setters
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+
+	public Set<Addon> getAddons() {
+		return addons;
+	}
+
+	public void setAddons(Set<Addon> addons) {
+		this.addons = addons;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
 }
