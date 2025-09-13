@@ -181,36 +181,30 @@
 </head>
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container-fluid">
-        <!-- Brand -->
-        <a class="navbar-brand fw-bold" href="#">
-            <i class="bi bi-shield-check me-2"></i> InsurePro
-        </a>
-
-        <!-- Toggle button for mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <a class="navbar-brand fw-bold" href="#"><i class="bi bi-shield-check me-2"></i>InsurePro</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/dashboard}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/user/catalogue}">Catalogue</a></li>
 
-        <!-- Links -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Catalogue</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Policy Filters</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="#">Vehicles</a></li>
             </ul>
-
-            <!-- Logout button inside navbar -->
-            <form th:action="@{/logout}" method="post" class="d-flex">
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
+            <div class="dropdown">
+                <button class="btn btn-light rounded-pill dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle me-1"></i> User
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
@@ -253,8 +247,8 @@
                     <td th:text="${vehicle.vehicleType}"></td>
                     <td th:text="${vehicle.ownerName}"></td>
                     <td>
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                        <button class="btn btn-success btn-sm">Purchase Insurance</button>
+                        <a class="btn btn-danger btn-sm">Delete</a>
+                        <a th:href="@{/user/catalogue}" class="btn btn-success btn-sm">Purchase Insurance</a>
                     </td>
                 </tr>
 
@@ -264,18 +258,18 @@
                     <td>Car</td>
                     <td>John Doe</td>
                     <td>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                        <a class="btn btn-danger btn-sm">Delete</a>
 
-                        <button class="btn btn-success btn-sm">Purchase Insurance</button></td>
+                        <a th:href="@{/user/catalogue}" class="btn btn-success btn-sm">Purchase Insurance</a></td>
                 </tr>
                 <tr>
                     <td>MH12XY5678</td>
                     <td>Bike</td>
                     <td>Jane Smith</td>
                     <td>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                        <a class="btn btn-danger btn-sm">Delete</a>
 
-                        <button class="btn btn-success btn-sm">Purchase Insurance</button></td>
+                        <a th:href="@{/user/catalogue}" class="btn btn-success btn-sm">Purchase Insurance</a></td>
                 </tr>
                 </tbody>
             </table>

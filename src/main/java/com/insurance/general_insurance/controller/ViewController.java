@@ -2,10 +2,12 @@ package com.insurance.general_insurance.controller;
 
 import java.security.Principal;
 
+import com.insurance.general_insurance.ProductCatalogue.Policy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -70,4 +72,28 @@ public class ViewController {
     public String index() {
         return "redirect:/login";
     }
+
+
+    // Adding the catalogue view page for user
+    @GetMapping("/user/catalogue")
+    public String userCatalogueView()
+    {
+        return "user-catalogue-view";
+    }
+
+    // Users to view individual policy.
+//    @GetMapping("/user/{policyId}")
+//    public String userPolicyView(@PathVariable Long policyId, Model model)
+//    {
+//        Policy policy = catalogueService.getPolicyDetails(policyId);
+//        model.addAttribute("policy", policy);
+//        return "user-policy-view";
+//    }
+    // For testing
+    @GetMapping("/user/policyView")
+    public String userPolicyView()
+    {
+        return "user-policy-view";
+    }
+
 }
