@@ -63,15 +63,6 @@ public class PolicyService {
         return policyRepository.findAll();
     }
 
-    // Get policies by user (if needed)
-    // This is for user and admin; both can view the policy currently mapped to a particular userID
-    // admin can see everyone's but user can see only his own.
-    public List<Policy> getUserPolicies(Long userId) {
-        // Logic for fetching user-specific policies (if required)
-        return policyRepository.getAllPolciesByUserId(userId);
-        // Wrote a JPQL for this in the policyRepsitory.
-    }
-
     //So when a user purchases a policy that policy is added to the list of policy for that user id
     //
 //    public String purchasePolicy(Long userId, Long policyId) {

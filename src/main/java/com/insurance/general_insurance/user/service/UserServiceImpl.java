@@ -1,11 +1,10 @@
 package com.insurance.general_insurance.user.service;
 
-import com.insurance.general_insurance.user.dto.ChangePasswordRequest;
-import com.insurance.general_insurance.user.dto.UserProfileDTO;
-import com.insurance.general_insurance.user.dto.UserUpdateRequest;
+import com.insurance.general_insurance.onlinePurchasePolicy.OnlinePurchase;
+import com.insurance.general_insurance.onlinePurchasePolicy.OnlinePurchaseRepository;
+import com.insurance.general_insurance.user.dto.*;
 import com.insurance.general_insurance.user.entity.Role;
 import com.insurance.general_insurance.user.entity.User;
-import com.insurance.general_insurance.user.dto.UserRegistrationRequest;
 import com.insurance.general_insurance.user.repository.UserRepository;
 import com.insurance.general_insurance.vehicle.dto.VehicleDTO;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +20,12 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+    private final OnlinePurchaseRepository onlinePurchaseRepository; // Added this line
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, OnlinePurchaseRepository onlinePurchaseRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.onlinePurchaseRepository = onlinePurchaseRepository; // Added this line
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -45,18 +45,30 @@ public class UserServiceImpl implements UserService {
         dto.setAddress(user.getAddress());
         dto.setRole(user.getRole().name());
 
-        // This is where the magic happens. Because the method is transactional,
-        // we can access the lazy collection here.
         List<VehicleDTO> vehicleDTOs = user.getVehicles().stream().map(vehicle -> {
             VehicleDTO vDto = new VehicleDTO();
             vDto.setId(vehicle.getId());
             vDto.setRegistrationNumber(vehicle.getRegistrationNumber());
             vDto.setVehicleType(vehicle.getVehicleType());
-            vDto.setVehicleName(vehicle.getVehicleName()); // Changed from setOwnerName
+            vDto.setVehicleName(vehicle.getVehicleName());
             return vDto;
         }).collect(Collectors.toList());
 
         dto.setVehicles(vehicleDTOs);
+
+        // Fetch and map purchased policies
+        List<OnlinePurchase> purchases = onlinePurchaseRepository.findByUserId(user.getId());
+        List<PurchasedPolicyDTO> purchasedPolicyDTOs = purchases.stream().map(purchase -> {
+            PurchasedPolicyDTO pDto = new PurchasedPolicyDTO();
+            pDto.setPolicyName(purchase.getPolicy().getPolicyName());
+            pDto.setPolicyNumber(purchase.getPolicyNumber());
+            pDto.setPurchaseDate(purchase.getPurchaseDate());
+            pDto.setVehicleName(purchase.getVehicle().getVehicleName());
+            pDto.setRegistrationNumber(purchase.getVehicle().getRegistrationNumber());
+            return pDto;
+        }).collect(Collectors.toList());
+
+        dto.setPurchasedPolicies(purchasedPolicyDTOs);
 
         return dto;
     }

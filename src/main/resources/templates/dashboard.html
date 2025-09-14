@@ -99,6 +99,35 @@
         </div>
     </div>
 
+    <div class="card p-4 mb-4">
+        <h2 class="mb-3">My Purchased Policies</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-primary">
+                <tr>
+                    <th>Policy Name</th>
+                    <th>Policy Number</th>
+                    <th>Purchase Date</th>
+                    <th>Vehicle Name</th>
+                    <th>Registration Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="policy : ${user.purchasedPolicies}">
+                    <td th:text="${policy.policyName}"></td>
+                    <td th:text="${policy.policyNumber}"></td>
+                    <td th:text="${policy.purchaseDate}"></td>
+                    <td th:text="${policy.vehicleName}"></td>
+                    <td th:text="${policy.registrationNumber}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(user.purchasedPolicies)}">
+                    <td colspan="5" class="text-center">You have not purchased any policies yet.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <form th:action="@{/logout}" method="post">
         <button type="submit" class="btn logout-btn text-white">Logout</button>
     </form>

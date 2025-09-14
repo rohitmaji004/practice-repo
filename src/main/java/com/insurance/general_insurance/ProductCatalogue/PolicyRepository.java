@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PolicyRepository extends JpaRepository<Policy,Long>{
 
-	@Query("select p from Policy p where p.user.id=:userId")
-	public List<Policy> getAllPolciesByUserId(Long userId);
 	@Query("select count(p) from Policy p")
 	public Long policyCount();
 	@Query("SELECT p FROM Policy p " +

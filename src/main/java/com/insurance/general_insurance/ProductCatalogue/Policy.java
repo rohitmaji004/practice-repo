@@ -3,10 +3,15 @@ package com.insurance.general_insurance.ProductCatalogue;
 import com.insurance.general_insurance.user.entity.User;
 import com.insurance.general_insurance.vehicle.entity.Vehicle;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 public class Policy {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +33,6 @@ public class Policy {
 	@Enumerated(EnumType.STRING)
 	private Set<Addon> addons;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id")
-	private User user;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "vehicle_id")
-	private Vehicle vehicle;
 
 	// Getters and Setters
 
@@ -108,21 +106,5 @@ public class Policy {
 
 	public void setAddons(Set<Addon> addons) {
 		this.addons = addons;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Vehicle getVehicle() {
-		return vehicle;
-	}
-
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
 	}
 }

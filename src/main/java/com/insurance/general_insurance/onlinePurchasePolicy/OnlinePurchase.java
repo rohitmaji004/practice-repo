@@ -1,4 +1,4 @@
-package com.insurance.general_insurance.onlinepurchase;
+package com.insurance.general_insurance.onlinePurchasePolicy;
 
 import java.time.LocalDate;
 

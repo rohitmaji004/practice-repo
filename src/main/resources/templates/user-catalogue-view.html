@@ -92,7 +92,7 @@
                     <td th:text="${policy.policyType.name().replace('_', ' ')}">Type</td>
                     <td class="text-center">
                         <a th:href="@{/user/policyView/{policyId}(policyId=${policy.id})}" class="btn btn-sm btn-info">View</a>
-                        <a th:if="${vehicle != null}" th:href="@{/purchase-policy(policyId=${policy.id}, vehicleId=${vehicle.id})}" class="btn btn-sm btn-success">Purchase</a>
+                        <a th:if="${vehicle != null}" th:href="@{/purchase/purchase-policy(policyId=${policy.id}, vehicleId=${vehicle.id})}" class="btn btn-sm btn-success">Purchase</a>
                     </td>
                 </tr>
                 </tbody>

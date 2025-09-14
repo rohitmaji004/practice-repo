@@ -58,12 +58,6 @@ public class PolicyController {
         return new ResponseEntity<>(policy, HttpStatus.OK);
     }
 
-    // User: View all purchased policies (User can see the policies they’ve bought)
-    @GetMapping("/user/{userId}") // This is working
-    public ResponseEntity<List<Policy>> getUserPolicies(@PathVariable Long userId) {
-        List<Policy> userPolicies = policyService.getUserPolicies(userId);
-        return new ResponseEntity<>(userPolicies, HttpStatus.OK);
-    }
 
     // User: Update their personal information on a policy (For example, contact
     // info)

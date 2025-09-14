@@ -1,5 +1,6 @@
 package com.insurance.general_insurance.user.entity;
 
+import com.insurance.general_insurance.onlinePurchasePolicy.OnlinePurchase;
 import com.insurance.general_insurance.vehicle.entity.Vehicle;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,6 +37,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OnlinePurchase> purchases;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -67,8 +71,3 @@ public class User implements UserDetails {
         return true;
     }
 }
-
-
-//passwor reset
-//forgot pass
-//password expired

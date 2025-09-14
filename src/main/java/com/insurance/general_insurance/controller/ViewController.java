@@ -94,20 +94,20 @@ public class ViewController {
     }
 
     // New endpoint for the online policy purchase form
-    @GetMapping("/purchase-policy")
-    public String purchasePolicyForm(@RequestParam Long policyId, @RequestParam Long vehicleId, Model model, Principal principal) {
-        try {
-            UserProfileDTO userProfile = userService.getUserProfile(principal.getName());
-            Policy policy = catalogueService.getPolicyDetails(policyId);
-            Vehicle vehicle = vehicleRepository.findById(vehicleId).orElse(null);
-            model.addAttribute("user", userProfile);
-            model.addAttribute("policy", policy);
-            model.addAttribute("vehicle", vehicle);
-            return "online_policy_purchase";
-        } catch (Exception e) {
-            return "redirect:/login?error";
-        }
-    }
+//    @GetMapping("/purchase-policy")
+//    public String purchasePolicyForm(@RequestParam Long policyId, @RequestParam Long vehicleId, Model model, Principal principal) {
+//        try {
+//            UserProfileDTO userProfile = userService.getUserProfile(principal.getName());
+//            Policy policy = catalogueService.getPolicyDetails(policyId);
+//            Vehicle vehicle = vehicleRepository.findById(vehicleId).orElse(null);
+//            model.addAttribute("user", userProfile);
+//            model.addAttribute("policy", policy);
+//            model.addAttribute("vehicle", vehicle);
+//            return "online_policy_purchase";
+//        } catch (Exception e) {
+//            return "redirect:/login?error";
+//        }
+//    }
 
     @GetMapping("/")
     public String index() {

@@ -17,4 +17,5 @@ public class UserProfileDTO {
     private String address;
     private String role;
     private List<VehicleDTO> vehicles;
+    private List<PurchasedPolicyDTO> purchasedPolicies; // Added this line
 }
