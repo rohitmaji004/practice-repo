@@ -29,7 +29,7 @@
                     <h5>Policy Details</h5>
                     <p class="mb-1"><strong>Policy:</strong> <span th:text="${policy.policyName}"></span></p>
                     <p class="mb-1"><strong>Type:</strong> <span th:text="${policy.policyType.name().replace('_', ' ')}"></span></p>
-                    <p class="mb-1"><strong>Premium:</strong> <strong class="text-danger">₹<span th:text="${policy.premiumAmount}"></span></strong></p>
+                    <p class="mb-1"><strong>Premium:</strong> <strong class="text-danger">₹<span id="displayedPremium" th:text="${policy.premiumAmount}"></span></strong></p>
                 </div>
                 <div class="col-md-6">
                     <h5>Vehicle Details</h5>
@@ -41,6 +41,23 @@
             <form id="purchaseForm" th:action="@{/purchase/confirm}" th:object="${purchaseRequest}" method="post">
                 <input type="hidden" name="policyId" th:value="${policy.id}" />
                 <input type="hidden" name="vehicleId" th:value="${vehicle.id}" />
+
+                <div class="mb-3">
+                    <h5 class="mb-3">Select Renewal Frequency</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="renewalFrequency" id="yearly" value="YEARLY" checked>
+                        <label class="form-check-label" for="yearly">
+                            Yearly
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="renewalFrequency" id="halfYearly" value="HALF_YEARLY">
+                        <label class="form-check-label" for="halfYearly">
+                            Half-Yearly
+                        </label>
+                    </div>
+                </div>
+
 
                 <h5 class="mb-3">Select Payment Method</h5>
                 <div class="form-group">
@@ -63,5 +80,24 @@
         </div>
     </div>
 </div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const basePremium = /*[[${policy.premiumAmount}]]*/ 0;
+    const displayedPremiumEl = document.getElementById('displayedPremium');
+
+    document.querySelectorAll('input[name="renewalFrequency"]').forEach(elem => {
+        elem.addEventListener("change", function(event) {
+            const selectedFrequency = event.target.value;
+            let newPremium = basePremium;
+            if (selectedFrequency === 'HALF_YEARLY') {
+                newPremium = basePremium / 2;
+            }
+            displayedPremiumEl.textContent = newPremium.toFixed(2);
+        });
+    });
+    /*]]>*/
+</script>
+
 </body>
 </html>

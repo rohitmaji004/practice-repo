@@ -21,7 +21,6 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" th:href="@{/dashboard}">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link active" th:href="@{/user/catalogue}">Catalogue</a></li>
-
                 <li class="nav-item"><a class="nav-link" href="#">Vehicles</a></li>
             </ul>
             <div class="dropdown">
@@ -75,7 +74,8 @@
                         This policy provides comprehensive coverage against damages and third-party liability.
                     </p>
                 </div>
-                <div class="col-12" th:if="${!policy.addons.isEmpty()}">
+                <!-- Corrected Add-ons Section -->
+                <div class="col-12" th:if="${policy.addons != null and !policy.addons.isEmpty()}">
                     <h6 class="text-muted">Included Add-ons</h6>
                     <ul class="list-group">
                         <li class="list-group-item" th:each="addon : ${policy.addons}" th:text="${addon.name().replace('_', ' ')}"></li>

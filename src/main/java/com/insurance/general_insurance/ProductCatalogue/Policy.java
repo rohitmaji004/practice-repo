@@ -33,6 +33,9 @@ public class Policy {
 	@Enumerated(EnumType.STRING)
 	private Set<Addon> addons;
 
+	@Enumerated(EnumType.STRING)
+	private RenewalFrequency renewalFrequency;
+
 
 	// Getters and Setters
 
@@ -106,5 +109,13 @@ public class Policy {
 
 	public void setAddons(Set<Addon> addons) {
 		this.addons = addons;
+	}
+
+	public RenewalFrequency getRenewalFrequency() {
+		return renewalFrequency;
+	}
+
+	public void setRenewalFrequency(RenewalFrequency renewalFrequency) {
+		this.renewalFrequency = renewalFrequency;
 	}
 }

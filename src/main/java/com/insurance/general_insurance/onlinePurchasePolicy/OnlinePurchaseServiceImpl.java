@@ -1,8 +1,11 @@
 package com.insurance.general_insurance.onlinePurchasePolicy;
 
 import com.insurance.general_insurance.Premium.PaymentMethod;
+import com.insurance.general_insurance.Premium.Premium;
+import com.insurance.general_insurance.Premium.PremiumService;
 import com.insurance.general_insurance.ProductCatalogue.Policy;
 import com.insurance.general_insurance.ProductCatalogue.PolicyRepository;
+import com.insurance.general_insurance.ProductCatalogue.RenewalFrequency;
 import com.insurance.general_insurance.user.entity.User;
 import com.insurance.general_insurance.user.repository.UserRepository;
 import com.insurance.general_insurance.vehicle.entity.Vehicle;
@@ -19,15 +22,18 @@ public class OnlinePurchaseServiceImpl implements OnlinePurchaseService {
     private final UserRepository userRepository;
     private final PolicyRepository policyRepository;
     private final VehicleRepository vehicleRepository;
+    private final PremiumService premiumService;
 
     public OnlinePurchaseServiceImpl(OnlinePurchaseRepository onlinePurchaseRepository,
                                      UserRepository userRepository,
                                      PolicyRepository policyRepository,
-                                     VehicleRepository vehicleRepository) {
+                                     VehicleRepository vehicleRepository,
+                                     PremiumService premiumService) {
         this.onlinePurchaseRepository = onlinePurchaseRepository;
         this.userRepository = userRepository;
         this.policyRepository = policyRepository;
         this.vehicleRepository = vehicleRepository;
+        this.premiumService = premiumService;
     }
 
     @Override
@@ -48,7 +54,37 @@ public class OnlinePurchaseServiceImpl implements OnlinePurchaseService {
         newPurchase.setPolicyNumber(UUID.randomUUID().toString().toUpperCase().substring(0, 13));
         newPurchase.setPaymentStatus("SUCCESS");
 
+        OnlinePurchase savedPurchase = onlinePurchaseRepository.save(newPurchase);
 
-        return onlinePurchaseRepository.save(newPurchase);
+        // Create the first premium record
+        Premium firstPremium = new Premium();
+        firstPremium.setPolicyId(policyId);
+        firstPremium.setAmount(policy.getPremiumAmount());
+        firstPremium.setDueDate(LocalDate.now()); // First payment is due now
+        firstPremium.setStatus("PAID"); // Mark it as paid since this is the initial purchase
+        premiumService.createPremium(firstPremium);
+
+        // Create the next premium record if a renewal frequency is set
+        if (policy.getRenewalFrequency() != null) {
+            Premium nextPremium = new Premium();
+            nextPremium.setPolicyId(policyId);
+            nextPremium.setAmount(policy.getPremiumAmount());
+            LocalDate nextDueDate = calculateNextDueDate(LocalDate.now(), policy.getRenewalFrequency());
+            nextPremium.setDueDate(nextDueDate);
+            nextPremium.setStatus("PENDING");
+            premiumService.createPremium(nextPremium);
+        }
+
+        return savedPurchase;
+    }
+
+    private LocalDate calculateNextDueDate(LocalDate currentDate, RenewalFrequency frequency) {
+        switch (frequency) {
+            case MONTHLY: return currentDate.plusMonths(1);
+            case QUARTERLY: return currentDate.plusMonths(3);
+            case HALF_YEARLY: return currentDate.plusMonths(6);
+            case YEARLY: return currentDate.plusYears(1);
+            default: return currentDate.plusYears(1); // Default to yearly
+        }
     }
 }
